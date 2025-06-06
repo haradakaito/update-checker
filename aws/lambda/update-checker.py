@@ -89,6 +89,7 @@ def lambda_handler(event, context):
         not TARGET_SCRAPING_URL or\
         not DYNAMODB_TABLE_NAME:
         print("エラー：環境変数が設定されていません．")
+        return {"statusCode": 500, "body": json.dumps("Missing environment variables")}
 
     # スクレイピング対象のURLから最新のアップデート情報を取得
     try:
@@ -96,7 +97,7 @@ def lambda_handler(event, context):
 
     except Exception as e:
         print(f"スクレイピング中にエラーが発生しました: {e}")
-        return {"statusCode": 500, "body": json.dumps("スクレイピングに失敗しました．")}
+        return {"statusCode": 500, "body": json.dumps("Failed to scrape the latest update information")}
 
     # 前回のパッチ情報の取得
     try:
@@ -107,7 +108,7 @@ def lambda_handler(event, context):
 
     except Exception as e:
         print(f"前回のパッチ情報の取得中にエラーが発生しました: {e}")
-        return {"statusCode": 500, "body": json.dumps("前回のパッチ情報の取得に失敗しました．")}
+        return {"statusCode": 500, "body": json.dumps("Failed to retrieve previous patch information")}
 
     # 前回のパッチ情報と最新のパッチ情報を比較
     has_changed = False
@@ -130,7 +131,7 @@ def lambda_handler(event, context):
 
         except Exception as e:
             print(f"パッチ情報の保存中にエラーが発生しました: {e}")
-            return {"statusCode": 500, "body": json.dumps("パッチ情報の保存に失敗しました．")}
+            return {"statusCode": 500, "body": json.dumps("Failed to save patch information")}
 
         # LINEメッセージの送信
         try:
@@ -142,4 +143,4 @@ def lambda_handler(event, context):
 
         except Exception as e:
             print(f"メッセージ送信中にエラーが発生しました: {e}")
-            return {"statusCode": 500, "body": json.dumps("メッセージ送信に失敗しました。")}
+            return {"statusCode": 500, "body": json.dumps("Failed to send LINE message")}
