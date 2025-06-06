@@ -137,7 +137,7 @@ def lambda_handler(event, context):
             send_line_message(
                 access_token=LINE_CHANNEL_ACCESS_TOKEN,
                 to=LINE_TO_ID,
-                text=f"オーバーウォッチに新しいアップデートがあります！"
+                text=f"オーバーウォッチに新しいアップデートがあります！\n{patch_info['url']}"
             )
 
         except Exception as e:
